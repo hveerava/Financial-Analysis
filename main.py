@@ -1,8 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import os
 
-directory = 'data'
+directory = 'graph_output'
 filename_1 = 'df_plot.png'
 filepath = os.path.join(directory, filename_1)
 
@@ -38,17 +39,25 @@ fb['Moving Avg'] = (fb['Close'] + fb['Close'].shift(1) + fb['Close'].shift(2))/3
 fb['MA_40'] = fb['Close'].rolling(40).mean()
 fb['MA_200'] = fb['Close'].rolling(200).mean()
 
-fb['Close'].plot()
+'''fb['Close'].plot()
 fb['MA_40'].plot()
-fb['MA_200'].plot()
+fb['MA_200'].plot()'''
 
 if not os.path.exists(directory):
     os.makedirs(directory)
 
-# Save the plot
-
+df = fb[['Close','MA_40', 'MA_200']].plot(title ="Moving Average Analysis",figsize=(15,5),legend=True)
+df.set_xticklabels(fb['Date'])
+plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%d/%Y'))
+plt.gca().xaxis.set_major_locator(mdates.DayLocator())
+df.plot()
+plt.gcf().autofmt_xdate()
 plt.show()
-plt.savefig(filepath)
-plt.close()
+
+
+# Save the plot
+#plt.xticks(list(fb['Date']), rotation=0)
+#plt.savefig(filepath)
+#plt.close()
 
 #print(fb.tail())
