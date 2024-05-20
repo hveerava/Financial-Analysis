@@ -1,6 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+from matplotlib import dates
+import numpy as np
+import datetime
 import os
 
 directory = 'graph_output'
@@ -46,14 +49,20 @@ fb['MA_200'].plot()'''
 if not os.path.exists(directory):
     os.makedirs(directory)
 
-df = fb[['Close','MA_40', 'MA_200']].plot(title ="Moving Average Analysis",figsize=(15,5),legend=True)
-df.set_xticklabels(fb['Date'])
-plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%d/%Y'))
-plt.gca().xaxis.set_major_locator(mdates.DayLocator())
-df.plot()
-plt.gcf().autofmt_xdate()
-plt.show()
+converted_dates = list(map(datetime.datetime.strptime, list(fb['Date']), len(list(fb['Date']))*['%Y-%m-%d']))
+x_axis = converted_dates
+formatter = dates.DateFormatter('%Y-%m-%d')
 
+#df = fb[['Close','MA_40', 'MA_200']].plot(title ="Moving Average Analysis",figsize=(15,5),legend=True)
+y_axis_1 = list(fb['Close'])
+#df.set_xticklabels(fb['Date'])
+plt.plot( x_axis, y_axis_1, '-' )
+ax = plt.gcf().axes[0] 
+ax.xaxis.set_major_formatter(formatter)
+plt.gcf().autofmt_xdate(rotation=25)
+plt.show()
+plt.savefig(filepath)
+plt.close()
 
 # Save the plot
 #plt.xticks(list(fb['Date']), rotation=0)
