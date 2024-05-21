@@ -7,18 +7,15 @@ from datetime import timedelta
 from sklearn.linear_model import LinearRegression
 import statsmodels.api as sm
 
-# Create output directory if it doesn't exist
 output_dir = "graph_output"
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
-# Read and preprocess Microsoft's CSV data
 def read_and_preprocess(file_path):
     df = pd.read_csv(file_path, parse_dates=['Date'])
     df.sort_values('Date', inplace=True)
     df.set_index('Date', inplace=True)
     
-    # Handling missing data
     df.fillna(method='ffill', inplace=True)
     
     df['Daily Return'] = df['Adj Close'].pct_change()
@@ -40,7 +37,6 @@ def read_and_preprocess(file_path):
     df['ADX'] = calculate_adx(df)
     return df
 
-# Calculate Relative Strength Index (RSI)
 def calculate_rsi(df, window=14):
     delta = df['Adj Close'].diff(1)
     gain = (delta.where(delta > 0, 0)).rolling(window=window).mean()
@@ -93,7 +89,7 @@ def calculate_adx(df, window=14):
     adx = dx.rolling(window=window).mean()
     return adx
 
-# Plotting functions
+# All Plots
 def plot_closing_price(df):
     plt.figure(figsize=(14, 7))
     plt.plot(df.index, df['Adj Close'], label='Adjusted Close Price')
@@ -224,7 +220,6 @@ def plot_adx(df):
     plt.savefig(f"{output_dir}/microsoft_adx.png")
     plt.close()
 
-# Main function to call all other functions
 def main():
     file_path = "data/microsoft.csv"
     df = read_and_preprocess(file_path)
