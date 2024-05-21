@@ -5,3 +5,7 @@
 - Apply key statistical concepts such as random variables, frequency, distributions, population vs. sample, confidence intervals, and linear regression to financial scenarios.
 - Develop a trading model using multiple linear regression.
 - Assess the trading model's effectiveness using various investment metrics.
+
+YTC:
+- Dashboard display
+- Upgrade graphs with plotly instead of matplotlib
